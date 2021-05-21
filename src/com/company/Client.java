@@ -12,34 +12,34 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.Comparator.*;
+import static java.util.stream.Collectors.*;
 
 public class Client {
 
     private final PartFactory partFactory;
-    private final List<Part> parts;
 
     public Client(PartFactory partFactory) {
-        parts = new ArrayList<>();
         this.partFactory = partFactory;
     }
 
-    public List<Part> getParts(int maxCost, int maxWeight) {
-        for (int i = 0; i < 100; i++) {
+    public List<Part> getParts(int amount, int maxCost, int maxWeight) {
+        List<Part> parts = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
             try {
                 Part part = partFactory.getPart();
                 verifyPart(part, maxCost, maxWeight);
                 parts.add(part);
-            } catch (Exception e) {
+            } catch (Exception ignore) {
             }
         }
         return parts;
     }
 
     public Map<String, List<Part>> groupingPartsByNameAndSort(List<Part> parts) {
-        return parts.stream().collect(Collectors.groupingBy(Part::getName,
-                Collectors.mapping(Function.identity(), Collectors.collectingAndThen(toList(),
-                        e -> e.stream().sorted(Comparator.comparingInt(Part::getCost)).collect(toList())))));
+        return parts.stream().collect(groupingBy(Part::getName,
+                collectingAndThen(toList(),
+                        e -> e.stream().sorted(comparingInt(Part::getCost)).collect(toList()))));
     }
 
     private void verifyPart(Part part, int maxCost, int maxWeight) {

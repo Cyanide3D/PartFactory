@@ -1,7 +1,6 @@
 package com.company;
 
 import com.company.factory.PartFactoryImpl;
-import com.company.parts.Nut;
 import com.company.parts.Part;
 
 import java.util.List;
@@ -10,10 +9,9 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) {
-
         Client client = new Client(new PartFactoryImpl());
 
-        List<Part> parts = client.getParts(200, 100);
+        List<Part> parts = client.getParts(100,200, 100);
         printParts(parts);
 
         System.out.println("--------------------------------------------------------------");
